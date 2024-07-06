@@ -1,51 +1,34 @@
-# basic list comprehension questions.
+# The use of match in STAT assignemnt 3
 
-#1 Even numbers
-a = [i for i in range(11) if i%2==0]
-print(a)
+x = [[] for i in range(0,11)]
+list1 = [11, 15, 19, 24, 32, 36, 40, 43, 46, 49,
+        60, 61, 64, 66, 69, 70, 73, 77, 79, 78,
+        82, 83, 85, 90, 140, 147, 157162, 169,
+        184, 205, 249, 264, 288, 323, 389, 512]
 
-#2 Fist letter in each word
-str = "Python is nice"
-b = [word[0] for word in str.split()]
-print(b)
-
-#3 square numbers
-
-c = [i*i for i in range(1,6)]
-print(c)
-
-#4 tuples from 2 lists
-
-a = [1,2,3] 
-b = [4,5,6]
-c = [(i,j) for i in a for j in b]
-print(c)
-
-#5 capitlize list of strings
-
-a = ["python is nice" , "java is good" , "c++ is poor"]
-c = [i.upper() for i in a]
-print(c)
-
-#6 capitilaize the first letter in each word in list of strings
-
-a = ["python is nice", "java is good", "c++ is poor"]
-c = [i.title() for i in a]
-print(c)
-
-# loops without using list comprehesnion and Title method
-
-sequence = ["python is good ", "java is nice " ,"c++ is fine"]
-sliced_sequence = []
-for i in sequence:
-    b=""
-    for j in i.split():
-        b = b + j.capitalize() + " "
-    sliced_sequence.append(b)  
-print(sliced_sequence)
-
-# list comprehension without using title method
-
-a = ["python is nice", "java is good", "c++ is poor"]
-c = [' '.join([word.capitalize() for word in i.split()]) for i in a]
-print(c)
+for i in list1:
+    match i:
+        case value if value < 50:
+            x[0].append(i)
+        case value if value < 100:
+            x[1].append(i)
+        case value if value < 150:
+            x[2].append(i)
+        case value if value < 200:
+            x[3].append(i)
+        case value if value < 250:
+            x[4].append(i)
+        case value if value < 300:
+            x[5].append(i)
+        case value if value < 350:
+            x[6].append(i)
+        case value if value < 400:
+            x[7].append(i)
+        case value if value < 450:
+            x[8].append(i)
+        case value if value < 500:
+            x[9].append(i)    
+        case value if value < 550:
+            x[10].append(i)
+for i in x:
+    print(f"{len(i)} with relative frequency equal: {len(i)/50}")
