@@ -147,7 +147,17 @@ while i != -1:
             libraryName = input("Enter the library name:")
             bookName = input("Enter the book name:")
             patronName = input("Enter the patron Name:")
-            libraries[libraryName].lendBook(patrons[patronName],patrons[patronName])
+            libraries[libraryName].lendBook(patrons[patronName],books[bookName])
             print(f"{patronName} has borrowed {bookName}")
+        case 7:
+            libraryName = input("Enter the library name:")
+            bookName = input("Enter the book name:")
+            patronName = input("Enter the patron Name:")
+            libraries[libraryName].returnBook(patrons[patronName],books[bookName])
+            print(f"{patronName} has returned {bookName}")
+        case 8:
+            libraryName = input("Enter the library name:")
+            libraries[libraryName].showBooks()
+            
             
             
