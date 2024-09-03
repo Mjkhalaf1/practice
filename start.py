@@ -13,6 +13,7 @@ class Library:
     def removeBook(self, book):
         if book in self.books.keys():
             print("A book is removed from the library.")
+            self.books[book] = int(self.books[book])
             if self.books[book] > 0:
                 self.books[book] -= 1
             if self.books[book] == 0 and self.borrowedBooks[book.name] == 0:
@@ -21,26 +22,33 @@ class Library:
             print("The book does not exist!")
         
     def lendBook(self, patron , book):
-        if(self.books[book] > 0):
-            print("A book is lent.")
-            self.books[book] -= 1 
-            if book.name in self.borrowedBooks.keys():
-                self.borrowedBooks[book.name] += 1
+        if book in self.books.keys():
+            self.books[book] = int(self.books[book])
+            if(self.books[book] > 0):
+                print("A book is lent.")
+                self.books[book] -= 1 
+                if book.name in self.borrowedBooks.keys():
+                    self.borrowedBooks[book.name] += 1
+                else:
+                    self.borrowedBooks[book.name] = 1
+                patron.borrowedBooks.append(book.name)
             else:
-                self.borrowedBooks[book.name] = 1
-            patron.borrowedBooks.append(book.name)
+                print("All books are lent!")
         else:
-            print("All books are lent! OR it does not exist!")
+            print("The book does not exist!")
     def returnBook(self, patron , book):
-        self.borrowedBooks[book.name] -= 1
-        if self.borrowedBooks[book.name] == 0:
-            del self.borrowedBooks[book.name]
-        if(book not in self.books.keys()):
-            self.addBook(book,1)
+        if book.name in self.borrowedBooks.keys():
+            self.borrowedBooks[book.name] -= 1
+            if self.borrowedBooks[book.name] == 0:
+                del self.borrowedBooks[book.name]
+            if(book not in self.books.keys()):
+                self.addBook(book,1)
+            else:
+                self.books[book] += 1    
+            print("You have successfuly returned the book.")
+            patron.borrowedBooks.remove(book.name)
         else:
-            self.books[book] += 1    
-        print("You have successfuly returned the book.")
-        patron.borrowedBooks.remove(book.name)
+            print("This book is not borrowed!")
         
     def showBooks(self):
         print(f"All the books in this library:{self.name}")
@@ -52,11 +60,12 @@ class Library:
         for i,j in self.borrowedBooks.items():
             print(i , "---", j)
     def transferBook(self , other , book, num):
-        numTransfered = min(num , self.books[book])
-        print(f"{numTransfered} are trnasfered to {other.name}")
-        for i in range(num):
-            self.removeBook(book)
-        other.addBook(book,numTransfered)
+        if book in self.books:
+            numTransfered = min(num , self.books[book])
+            print(f"{numTransfered} are trnasfered to {other.name}")
+            for i in range(num):
+                self.removeBook(book)
+            other.addBook(book,numTransfered)
     def __add__(self, other):
         self.showBooks()
         other.showBooks()
@@ -83,30 +92,62 @@ class Patron:
             print(book)
             
 #-----------------------------------------------------------------------------------------#
+print("-------------------------------")
+print("Welcome to my library system.")
+print("-------------------------------")
+print("""Enter 1 to create a library instance
+Enter 2 to create a book instance
+Enter 3 to create a patron instance
+Enter 4 to add a book to the library
+Enter 5 to remove a book from the library
+Enter 6 to borrow a book
+Enter 7 to return a book
+Enter 8 to show all books in the library
+Enter 9 to show all borrowed books in the library
+Enter 10 to transfer a book to another library
+Enter 11 to show all books in two libraries
+Enter 12 to show borrowed books for a patron""")
+libraries = {}
+books = {}
+patrons = {}
+i = 0
+while i != -1:
+    i = int(input("Enter the number for your process:"))
+    match i:
+        case 1:
+            libraryName = input("Enter the library name:")
+            libraryLocation = input("Enter the library location:")
+            libraryIns = Library(libraryName , libraryLocation)
+            libraries[libraryName] = libraryIns
+            print("A library instance is created successfuly")
+        case 2:
+             bookName = input("Enter the book name:")
+             bookAuthor = input("Enter the book author:")
+             bookType = input("Enter the book type:")
+             bookIns = Book(bookName , bookAuthor , bookType)
+             books[bookName] = bookIns
+             print("A book instance is created successfuly")
+        case 3:
+            patronName = input("Enter the patron Name:")
+            patronIns= Patron(patronName)
+            patrons[patronName] = patronIns
+            print("A patron instance is created successfuly")
+        case 4:
+            libraryName = input("Enter the library name:")
+            bookName = input("Enter the book name:")
+            numbers = input ("Enter the numbers of this book:")
+            libraries[libraryName].addBook(books[bookName],numbers)
+            print("The book is added")
+        case 5:
+            libraryName = input("Enter the library name:")
+            bookName = input("Enter the book name:")
+            libraries[libraryName].removeBook(books[bookName])
+            print("The book is removed")
+        case 6: 
+            libraryName = input("Enter the library name:")
+            bookName = input("Enter the book name:")
+            patronName = input("Enter the patron Name:")
+            libraries[libraryName].lendBook(patrons[patronName],patrons[patronName])
+            print(f"{patronName} has borrowed {bookName}")
             
-library1 = Library("UOB Lib" , "Manama")
-book1 = Book("Calaculus" , "Fahad" , "Math")
-book2 = Book("To Kill a Mockingbird", "Harper Lee", "Fiction")
-book3 = Book("1984", "George Orwell", "Dystopian" )
-book4 = Book("The Great Gatsby", "F. Scott Fitzgerald", "Classic")
-book5 = Book("Introduction to Algorithms", "Thomas H. Cormen", "Computer Science")
-book6 = Book("A Brief History of Bahrain", "Hasan alEbrahimi", "History")
-book7= Ebook("Cloud Computing", "Khalaf", "IT" , "PDF")
-library1.addBook(book1,4)
-library1.addBook(book2,2)
-library1.addBook(book3,2)
-library1.addBook(book4,2)
-library1.addBook(book5,2)
-library1.addBook(book6,2)
-library1.addBook(book7,1)
-library1.removeBook(book3)
-library2 = Library("PolyLib", "Raffa")
-library1.transferBook(library2,book1,2)
-library2.addBook(book6,10)
-print(library1 + library2)
-
-
-
-
-
-           
+            
