@@ -1,5 +1,6 @@
+# A program to recognize the letter on the image between A, C and M.
 from PIL import Image
-images_paths = ["Aorg.png" , "Morg.png" , "Corg.png" , "Test3.png"]  
+images_paths = ["Aorg.png" , "Morg.png" , "Corg.png" , "Test4.png"]  
 PxList = []
 for imgPath in images_paths:
     image = Image.open(imgPath)
